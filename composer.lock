@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ccbd816a07b206f971042295b899d1ba",
+    "content-hash": "d798f40d583be1ed7b2bd9b37e37ada4",
     "packages": [
         {
             "name": "brick/math",
@@ -2162,6 +2162,47 @@
                 }
             ],
             "time": "2022-07-30T15:51:26+00:00"
+        },
+        {
+            "name": "prewk/xml-streamer",
+            "version": "0.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/prewk/XmlStreamer.git",
+                "reference": "d375929a7d96b9dc0246af270209465c7dd4de5b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/prewk/XmlStreamer/zipball/d375929a7d96b9dc0246af270209465c7dd4de5b",
+                "reference": "d375929a7d96b9dc0246af270209465c7dd4de5b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Prewk\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "prewk",
+                    "email": "oskar.thornblad@gmail.com"
+                }
+            ],
+            "description": "Stream large XML files with low memory consumption.",
+            "homepage": "https://github.com/prewk/XmlStreamer",
+            "support": {
+                "issues": "https://github.com/prewk/XmlStreamer/issues",
+                "source": "https://github.com/prewk/XmlStreamer/tree/0.5.0"
+            },
+            "time": "2015-03-09T21:19:27+00:00"
         },
         {
             "name": "psr/container",
