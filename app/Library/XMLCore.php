@@ -17,24 +17,29 @@ class XMLCore
         unlink($filePath);
 
 
+        $flameRate = 30;
         $csv = [];
+        $str = '';
         foreach ($result as $item) {
             $start = intval($item['start']);
             $end = intval($item['end']);
-            $sec = floor($start / 30);
-            $startStr = str_pad(floor($sec / 60), 2, 0, STR_PAD_LEFT).
+            $sec = floor($start / $flameRate);
+            $startStr = floor($sec / 3600).
+                ':'.str_pad(floor(($sec % 3600) / 60), 2, 0, STR_PAD_LEFT).
                 ':'.str_pad($sec % 60, 2, 0, STR_PAD_LEFT).
-                ':'.str_pad(($start % 30), 2, 0, STR_PAD_LEFT);
-            $sec = floor($end / 30);
-            $endStr = str_pad(floor($sec / 60), 2, 0, STR_PAD_LEFT).
+                '.'.str_pad(floor(1000 * ($start % $flameRate) / $flameRate), 3, 0, STR_PAD_LEFT);
+            $sec = floor($end / $flameRate);
+            $endStr = floor($sec / 3600).
+                ':'.str_pad(floor(($sec % 3600) / 60), 2, 0, STR_PAD_LEFT).
                 ':'.str_pad($sec % 60, 2, 0, STR_PAD_LEFT).
-                ':'.str_pad(($end % 30), 2, 0, STR_PAD_LEFT);
+                '.'.str_pad(floor(1000 * ($end % $flameRate) / $flameRate), 3, 0, STR_PAD_LEFT);
 
             $text = str_replace(array("\r\n", "\r", "\n"), '', $item['name']);
             $csv[] = [$startStr, $endStr, $text];
+            $str .= $startStr.','.$endStr.PHP_EOL.$text.PHP_EOL.PHP_EOL;
         }
 
-        return $csv;
+        return ($str);
     }
 
 }

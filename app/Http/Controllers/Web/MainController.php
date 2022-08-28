@@ -18,17 +18,18 @@ class MainController extends Controller
         if(!$request->file('xml')){
             return redirect('/');
         }
-        $csv = XMLCore::parseXML($request, 'xml');
+        $str = XMLCore::parseXML($request, 'xml');
 
-        $response = new StreamedResponse(function() use ($request, $csv){
+        $response = new StreamedResponse(function() use ($request, $str){
             $stream = fopen('php://output', 'w');
-            foreach($csv as $key => $value) {
-                fputcsv($stream, $value);
-            }
+            //foreach($csv as $key => $value) {
+                //fputcsv($stream, $value);
+            //}
+            fputs($stream, $str);
             fclose($stream);
         });
-        $filename = 'script'.time().'.csv';
-        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
+        $filename = 'script'.time().'.sbv';
+        $response->headers->set('Content-Type', 'text/sbv; charset=UTF-8');
         $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
 
         return $response;
