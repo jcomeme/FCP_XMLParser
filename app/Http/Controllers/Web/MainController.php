@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Library\TranslationCore;
 use App\Library\XMLCore;
 use Faker\Core\File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MainController extends Controller
@@ -20,27 +22,37 @@ class MainController extends Controller
         if(!$request->file('xml')){
             return redirect('/');
         }
+        $rules = [
+            'title' => ['required'],
+            'description' => ['required'],
+        ];
+        $vData = $request->validate($rules);
+
         $arr = XMLCore::parseXML($request, 'xml');
+
+        $titleDescrption = '';
+        $translater = new TranslationCore();
+        foreach ($translater->lang as $langCode => $langName){
+            $rst = $translater->executeTransrationMulti([$vData['title'], $vData['description']], $langCode);
+            $titleDescrption .= $langName.PHP_EOL.PHP_EOL;
+            $titleDescrption .= $rst[0]['text'].PHP_EOL.PHP_EOL;
+            $titleDescrption .= $rst[1]['text'].PHP_EOL.PHP_EOL.PHP_EOL.PHP_EOL;
+        }
+
         //dd($arr);
-        $response = new StreamedResponse(function() use ($arr) {
-            $handle = fopen('php://output', 'w');
-            foreach ($arr as $row) {
-                fputs($handle, $row);
-            }
-            fclose($handle);
-        });
         $time = time();
-        $path = storage_path('translate');
 
-        $links = [];
 
-        $save_path = storage_path('app/public/'.$time.'.zip');
+        $save_path = storage_path('app/public/'.Str::random(8).$time.'.zip');
         $zip = new \ZipArchive();
         $zip->open($save_path, \ZipArchive::CREATE);
+
         foreach ($arr as $lang=>$item) {
             $filename = 'script_'.$lang.'.sbv';
             $zip->addFromString($filename, $item);
         }
+        $filename = 'title_and_description.txt';
+        $zip->addFromString($filename, $titleDescrption);
         $zip->close();
 
         return response()->download($save_path);
