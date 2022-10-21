@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Library\XMLCore;
+use Faker\Core\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MainController extends Controller
@@ -18,20 +20,30 @@ class MainController extends Controller
         if(!$request->file('xml')){
             return redirect('/');
         }
-        $str = XMLCore::parseXML($request, 'xml');
-
-        $response = new StreamedResponse(function() use ($request, $str){
-            $stream = fopen('php://output', 'w');
-            //foreach($csv as $key => $value) {
-                //fputcsv($stream, $value);
-            //}
-            fputs($stream, $str);
-            fclose($stream);
+        $arr = XMLCore::parseXML($request, 'xml');
+        //dd($arr);
+        $response = new StreamedResponse(function() use ($arr) {
+            $handle = fopen('php://output', 'w');
+            foreach ($arr as $row) {
+                fputs($handle, $row);
+            }
+            fclose($handle);
         });
-        $filename = 'script'.time().'.sbv';
-        $response->headers->set('Content-Type', 'text/sbv; charset=UTF-8');
-        $response->headers->set('Content-Disposition', 'attachment; filename="'.$filename.'"');
+        $time = time();
+        $path = storage_path('translate');
 
-        return $response;
+        $links = [];
+
+        $save_path = storage_path('app/public/'.$time.'.zip');
+        $zip = new \ZipArchive();
+        $zip->open($save_path, \ZipArchive::CREATE);
+        foreach ($arr as $lang=>$item) {
+            $filename = 'script_'.$lang.'.sbv';
+            $zip->addFromString($filename, $item);
+        }
+        $zip->close();
+
+        return response()->download($save_path);
+
     }
 }

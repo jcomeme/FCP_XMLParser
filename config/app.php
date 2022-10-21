@@ -212,4 +212,6 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'google_api_key' => env('GOOGLE_TRANSLATION_API_KEY'),
+
 ];
