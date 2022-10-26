@@ -69,7 +69,7 @@ class XMLCore
                 $r = $translator->executeTransrationMulti($sliced, $key);
                 if ($r) {
                     foreach ($r as $i) {
-                        $arr[$key] .= $timeArr[$lcounter]['start'] . ',' . $timeArr[$lcounter]['end'] . PHP_EOL . $i['text'] . PHP_EOL . PHP_EOL;
+                        $arr[$key] .= $timeArr[$lcounter]['start'] . ',' . $timeArr[$lcounter]['end'] . PHP_EOL . ($i['text']) . PHP_EOL . PHP_EOL;
                         $lcounter++;
                     }
                 }else{

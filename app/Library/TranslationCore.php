@@ -75,7 +75,10 @@ class TranslationCore
             $translate = new TranslateClient(['key' => $this->api_key]);
             $result = $translate->translateBatch(
                 $text_list,
-                ['target' => $lang_code]
+                [
+                    'target' => $lang_code,
+                    'format' => 'text'
+                ]
             );
 
             //\Log::debug(print_r($result,1));
