@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Library\TranslationCore;
 use App\Library\XMLCore;
 use Faker\Core\File;
+use GPBMetadata\Google\Api\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;

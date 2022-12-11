@@ -34,6 +34,11 @@ class XMLCore
         foreach ($result as $item) {
             $start = intval($item['start']);
             $end = intval($item['end']);
+            if($start > $end){
+                $tmp = $start;
+                $start = $end;
+                $end = $tmp;
+            }
             $sec = floor($start / $flameRate);
             $startStr = floor($sec / 3600) .
                 ':' . str_pad(floor(($sec % 3600) / 60), 2, 0, STR_PAD_LEFT) .
