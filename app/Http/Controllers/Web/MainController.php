@@ -29,7 +29,7 @@ class MainController extends Controller
         ];
         $vData = $request->validate($rules);
 
-        $arr = XMLCore::parseXML($request, 'xml');
+        $arr = XMLCore::parseXML($request, 'xml', $request->get('flame_rate'));
 
         $titleDescrption = '';
         $translater = new TranslationCore();

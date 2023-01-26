@@ -17,6 +17,15 @@
                 <br>
                 <input type="file" name="xml">
 
+                <br>
+                <div style="width:300px;margin:30px 0;">
+                フレームレート
+                <select class="form-control" name="flame_rate">
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                </select>
+                </div>
+
                 <input type="submit" class="btn btn-primary" value="送信">
             </form>
         </div>

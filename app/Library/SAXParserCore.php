@@ -12,6 +12,7 @@ class SAXParserCore{
     public $status = '';
     public $tempName = '';
     public $tempStart = 0;
+    public $tempEnd = 0;
     public $serifStatus = false;
     public $inEffect = false;
     public $inName = false;
@@ -27,6 +28,13 @@ class SAXParserCore{
             if ($name == 'CLIPITEM'){
                 //echo 'clip'.PHP_EOL;
                 $this->status = 'clip';
+                if($this->serifStatus){
+                    $index = count($this->result) - 1;
+                    if($index >= 0){
+                        $this->result[$index]['end'] = $this->tempEnd;
+                    }
+                    $this->serifStatus = false;
+                }
             }
             if ($name == 'START'){
                 //echo 'start'.PHP_EOL;
@@ -86,6 +94,7 @@ class SAXParserCore{
                 //echo $data.'<br>'.PHP_EOL;
             }
             if ($this->status == 'end'){
+                $this->tempEnd = $data;
                 if($this->serifStatus){
                     //echo $data.'<br>';
 

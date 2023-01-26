@@ -2,12 +2,13 @@
 
 namespace App\Library;
 
+use GPBMetadata\Google\Api\Log;
 use Illuminate\Http\Request;
 
 class XMLCore
 {
 
-    public static function parseXML(Request $request, $key)
+    public static function parseXML(Request $request, $key, $flameRate = 30)
     {
         $fileName = (time()) . mt_rand(1, 9999999) . "." . $request->file($key)->guessExtension();//TMPファイル名
         $request->file($key)->move(storage_path() . "/xml", $fileName);
@@ -15,10 +16,9 @@ class XMLCore
 
         $streamer = new SAXParserCore();
         $result = $streamer->parse($filePath);
+        \Log::info($result);
         unlink($filePath);
 
-
-        $flameRate = 30;
         $csv = [];
 
         $translator = new TranslationCore();
@@ -34,6 +34,9 @@ class XMLCore
         foreach ($result as $item) {
             $start = intval($item['start']);
             $end = intval($item['end']);
+
+            \Log::info('start:'.$start);
+            \Log::info('enx:'.$end);
             if($start > $end){
                 $tmp = $start;
                 $start = $end;
@@ -51,6 +54,7 @@ class XMLCore
                 '.' . str_pad(floor(1000 * ($end % $flameRate) / $flameRate), 3, 0, STR_PAD_LEFT);
 
             $text = str_replace(array("\r\n", "\r", "\n"), '', $item['name']);
+            \Log::info('text:'.$text);
 
             //$transText = $translator->executeTransrationSingle($text, 'pt');
 
